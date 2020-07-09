@@ -268,3 +268,5 @@ CONF_VERSION = "1"
 
 ACCEPT_EULA_stm32mp1 = "1"
 LICENSE_FLAGS_WHITELIST = "commercial"
+
+BBMASK += "meta-st-stm32mp/recipes-graphics/drm"
