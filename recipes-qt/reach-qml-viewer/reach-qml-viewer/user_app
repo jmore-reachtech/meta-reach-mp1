@@ -1,0 +1,46 @@
+#!/bin/sh
+#		levels	start	kill
+#===================================
+# chkconfig:	5	99	10
+# description:	run the user application \
+#		as shipped, this will start \
+#		the Reach qml-viewer
+
+QML_APP_BIN="/usr/bin/qml-viewer"
+QML_APP_ARGS="-platform eglfs -plugin tslib"
+
+source /etc/profile.d/tslib.sh
+
+export QT_QPA_FONTDIR=/usr/share/fonts
+export QT_QPA_EGLFS_HIDECURSOR=1
+
+start() {
+	printf "Starting User Application: "
+	start-stop-daemon -b -S -q -m -p /var/run/qmlapp.pid --exec $QML_APP_BIN -- $QML_APP_ARGS
+	echo "OK"
+}
+
+stop() {
+	printf "Stopping User Application: "
+	start-stop-daemon -s QUIT -K -q -p /var/run/qmlapp.pid
+	sleep 3
+	echo "OK"
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart|reload)
+	stop
+	start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
